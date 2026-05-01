@@ -1,0 +1,2385 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blip × Porsche Cup Brasil — Inteligência Conversacional</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blip-blue: #0096FA;
+  --blip-blue-dark: #0077C8;
+  --blip-blue-glow: rgba(0,150,250,0.18);
+  --blip-blue-soft: rgba(0,150,250,0.08);
+  --black: #000000;
+  --bg-1: #050B14;
+  --bg-2: #0A1628;
+  --bg-3: #0F2540;
+  --white: #FFFFFF;
+  --off-white: #E8F0FA;
+  --gray: #8AA0B8;
+  --gray-dim: #4A5A70;
+  --porsche-red: #D5001C;
+  --porsche-gold: #B8860B;
+  --wa-green: #25D366;
+  --wa-dark-green: #075E54;
+  --wa-bg: #ECE5DD;
+  --wa-bubble-out: #DCF8C6;
+  --font: 'Lexend', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-1);
+  color: var(--white);
+  font-family: var(--font);
+  font-weight: 300;
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--bg-1); }
+::-webkit-scrollbar-thumb { background: var(--blip-blue); }
+
+/* GLOBAL GRADIENT BACKGROUND */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, var(--blip-blue-glow) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 60% at 100% 50%, rgba(0,119,200,0.1) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 60% at 0% 80%, rgba(0,150,250,0.08) 0%, transparent 60%),
+    linear-gradient(180deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-1) 100%);
+  z-index: -1;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 22px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: linear-gradient(to bottom, rgba(5,11,20,0.95), transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.nav-blip {
+  font-family: var(--font);
+  font-weight: 700;
+  font-size: 20px;
+  color: var(--blip-blue);
+  letter-spacing: -0.02em;
+}
+
+.nav-blip::before {
+  content: '';
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background: var(--blip-blue);
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: middle;
+  box-shadow: 0 0 12px var(--blip-blue);
+}
+
+.nav-sep {
+  width: 1px;
+  height: 22px;
+  background: rgba(255,255,255,0.15);
+}
+
+.nav-porsche {
+  font-family: var(--font);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--white);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.nav-links {
+  display: flex;
+  gap: 36px;
+  list-style: none;
+}
+
+.nav-links a {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--gray);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nav-links a:hover { color: var(--blip-blue); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 140px 60px 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,150,250,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,150,250,0.06) 1px, transparent 1px);
+  background-size: 80px 80px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%);
+}
+
+.hero-orbit {
+  position: absolute;
+  width: 800px;
+  height: 800px;
+  border: 1px solid rgba(0,150,250,0.08);
+  border-radius: 50%;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.hero-orbit::before, .hero-orbit::after {
+  content: '';
+  position: absolute;
+  border: 1px solid rgba(0,150,250,0.06);
+  border-radius: 50%;
+}
+
+.hero-orbit::before {
+  inset: -120px;
+}
+
+.hero-orbit::after {
+  inset: -240px;
+  border-color: rgba(0,150,250,0.04);
+}
+
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  color: var(--blip-blue);
+  text-transform: uppercase;
+  margin-bottom: 36px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.3s forwards;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: '';
+  width: 30px;
+  height: 1px;
+  background: var(--blip-blue);
+  opacity: 0.5;
+}
+
+.hero-title {
+  font-family: var(--font);
+  font-size: clamp(56px, 8.5vw, 124px);
+  font-weight: 200;
+  line-height: 0.95;
+  text-align: center;
+  letter-spacing: -0.035em;
+  max-width: 1100px;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.5s forwards;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-title strong {
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--blip-blue) 0%, #4FB8FF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: block;
+}
+
+.hero-sub {
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--gray);
+  text-align: center;
+  max-width: 600px;
+  margin-top: 36px;
+  line-height: 1.8;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.7s forwards;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-meta {
+  position: absolute;
+  bottom: 50px;
+  display: flex;
+  gap: 60px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  color: var(--gray-dim);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeUp 1s ease 0.9s forwards;
+}
+
+.hero-meta span { color: var(--blip-blue); }
+
+/* SECTION BASE */
+section {
+  padding: 140px 60px;
+  position: relative;
+}
+
+.section-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.35em;
+  color: var(--blip-blue);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.section-label::before {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--blip-blue);
+  opacity: 0.6;
+}
+
+.section-title {
+  font-family: var(--font);
+  font-size: clamp(44px, 5.5vw, 80px);
+  font-weight: 200;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.section-title strong {
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--blip-blue) 0%, #4FB8FF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* S1: BLIP */
+.blip-section {
+  padding-top: 120px;
+}
+
+.blip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+  margin-top: 60px;
+  margin-bottom: 100px;
+}
+
+.blip-tagline {
+  font-size: clamp(20px, 2.2vw, 26px);
+  font-weight: 400;
+  color: var(--white);
+  margin-bottom: 32px;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+}
+
+.blip-tagline strong {
+  color: var(--blip-blue);
+  font-weight: 600;
+}
+
+.blip-text {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--gray);
+  line-height: 1.85;
+  margin-bottom: 24px;
+}
+
+.blip-text strong { color: var(--white); font-weight: 500; }
+
+.blip-pillars {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 36px;
+}
+
+.blip-pillar {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 22px;
+  background: rgba(0,150,250,0.04);
+  border-left: 2px solid var(--blip-blue);
+  border-radius: 0 8px 8px 0;
+  transition: all 0.3s;
+}
+
+.blip-pillar:hover {
+  background: rgba(0,150,250,0.08);
+  transform: translateX(4px);
+}
+
+.blip-pillar-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(0,150,250,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-weight: 700;
+  color: var(--blip-blue);
+  font-size: 14px;
+}
+
+.blip-pillar-text {
+  font-size: 14.5px;
+  font-weight: 400;
+  color: var(--white);
+  line-height: 1.5;
+}
+
+.blip-pillar-text span {
+  color: var(--blip-blue);
+  font-weight: 500;
+}
+
+/* Video wrapper */
+.video-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.video-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: var(--blip-blue);
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.video-label::before {
+  content: '▶';
+  font-size: 8px;
+}
+
+.video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--bg-3);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(0,150,250,0.15),
+    0 0 60px rgba(0,150,250,0.08);
+}
+
+.video-wrapper iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* KPI grid */
+.kpi-section {
+  margin-top: 80px;
+}
+
+.kpi-eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  color: var(--gray);
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.kpi-card {
+  padding: 36px 28px;
+  background: linear-gradient(135deg, rgba(0,150,250,0.05) 0%, rgba(0,150,250,0.02) 100%);
+  border: 1px solid rgba(0,150,250,0.12);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.4s;
+}
+
+.kpi-card:hover {
+  transform: translateY(-6px);
+  border-color: var(--blip-blue);
+  background: linear-gradient(135deg, rgba(0,150,250,0.1) 0%, rgba(0,150,250,0.04) 100%);
+  box-shadow: 0 20px 60px rgba(0,150,250,0.15);
+}
+
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 60px;
+  height: 60px;
+  background: radial-gradient(circle, var(--blip-blue) 0%, transparent 70%);
+  opacity: 0.15;
+  filter: blur(20px);
+}
+
+.kpi-number {
+  font-size: clamp(36px, 3.5vw, 52px);
+  font-weight: 700;
+  color: var(--blip-blue);
+  line-height: 1;
+  letter-spacing: -0.04em;
+  margin-bottom: 10px;
+}
+
+.kpi-label {
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--gray);
+  line-height: 1.55;
+}
+
+/* Awards */
+.awards-block {
+  margin-top: 70px;
+}
+
+.awards-eyebrow {
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: var(--blip-blue);
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.awards-eyebrow::before, .awards-eyebrow::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--blip-blue);
+  opacity: 0.4;
+}
+
+.recognitions {
+  padding: 36px 40px;
+  border: 1px solid rgba(0,150,250,0.12);
+  border-radius: 16px;
+  background: rgba(0,150,250,0.02);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  text-align: center;
+}
+
+.recognition-item {
+  border-right: 1px solid rgba(0,150,250,0.1);
+  padding: 0 16px;
+}
+
+.recognition-item:last-child { border-right: none; }
+
+.recognition-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 6px;
+  line-height: 1.3;
+}
+
+.recognition-meta {
+  font-size: 11px;
+  color: var(--blip-blue);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.recognition-desc {
+  font-size: 12.5px;
+  color: var(--gray);
+  font-weight: 300;
+  line-height: 1.55;
+}
+
+/* DIVIDER */
+.divider {
+  margin: 0 60px;
+  height: 1px;
+  background: linear-gradient(to right, transparent, rgba(0,150,250,0.3), transparent);
+}
+
+/* S2: CASES */
+.cases-section {
+  background: linear-gradient(180deg, transparent 0%, rgba(0,150,250,0.03) 50%, transparent 100%);
+}
+
+.cases-intro {
+  margin-bottom: 80px;
+  max-width: 700px;
+}
+
+.cases-intro p {
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--gray);
+  line-height: 1.85;
+  margin-top: 28px;
+}
+
+/* Cases reel video block */
+.cases-reel {
+  max-width: 900px;
+  margin: 0 auto 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.cases-reel .video-wrapper {
+  padding-bottom: 56.25%;
+  border-radius: 16px;
+  box-shadow:
+    0 40px 100px rgba(0,0,0,0.55),
+    0 0 0 1px rgba(0,150,250,0.18),
+    0 0 80px rgba(0,150,250,0.12);
+}
+
+.case-item {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 60px;
+  align-items: center;
+  padding: 80px 0;
+  border-top: 1px solid rgba(0,150,250,0.08);
+}
+
+.case-item:last-child { border-bottom: 1px solid rgba(0,150,250,0.08); }
+
+.case-item.reverse { direction: rtl; }
+.case-item.reverse > * { direction: ltr; }
+
+.case-brand {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.case-brand-logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.case-brand-name {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: var(--blip-blue);
+  text-transform: uppercase;
+}
+
+.case-brand-segment {
+  font-size: 10px;
+  color: var(--gray-dim);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  margin-top: 2px;
+}
+
+.case-title {
+  font-family: var(--font);
+  font-size: clamp(28px, 3vw, 40px);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+
+.case-title strong {
+  font-weight: 600;
+  color: var(--blip-blue);
+}
+
+.case-desc {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--gray);
+  line-height: 1.85;
+  margin-bottom: 28px;
+}
+
+.case-desc strong { color: var(--white); font-weight: 500; }
+
+.case-resources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 32px;
+}
+
+.case-chip {
+  font-size: 11px;
+  font-weight: 400;
+  padding: 6px 14px;
+  background: rgba(0,150,250,0.1);
+  border: 1px solid rgba(0,150,250,0.2);
+  color: var(--blip-blue);
+  border-radius: 20px;
+}
+
+.case-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+  padding-top: 28px;
+  border-top: 1px solid rgba(0,150,250,0.1);
+}
+
+.case-metric-val {
+  font-size: clamp(24px, 2.4vw, 34px);
+  font-weight: 700;
+  color: var(--blip-blue);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  margin-bottom: 6px;
+}
+
+.case-metric-lbl {
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--gray);
+  line-height: 1.4;
+}
+
+.case-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.case-visual-video {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--bg-3);
+  box-shadow:
+    0 30px 80px rgba(0,0,0,0.5),
+    0 0 0 1px rgba(0,150,250,0.15);
+}
+
+.case-visual-video iframe {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* iPhone Mockup — para sessão 3 */
+.iphone {
+  width: 290px;
+  margin: 0 auto;
+  position: relative;
+  filter: drop-shadow(0 30px 80px rgba(0,0,0,0.6)) drop-shadow(0 0 40px rgba(0,150,250,0.15));
+}
+
+.iphone-frame {
+  background: #1a1a1a;
+  border-radius: 44px;
+  padding: 12px;
+  position: relative;
+  box-shadow:
+    inset 0 0 0 2px #2a2a2a,
+    inset 0 0 0 4px #0a0a0a;
+}
+
+.iphone-screen {
+  background: var(--wa-bg);
+  border-radius: 32px;
+  overflow: hidden;
+  position: relative;
+  height: 580px;
+  display: flex;
+  flex-direction: column;
+}
+
+.iphone-notch {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 26px;
+  background: #000;
+  border-radius: 16px;
+  z-index: 10;
+}
+
+.iphone-statusbar {
+  background: var(--wa-dark-green);
+  height: 50px;
+  display: flex;
+  align-items: flex-end;
+  padding: 0 24px 4px;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #fff;
+  font-weight: 600;
+}
+
+/* WhatsApp Header */
+.wa-header {
+  background: var(--wa-dark-green);
+  padding: 8px 14px 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.wa-back {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 300;
+}
+
+.wa-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  color: #fff;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.wa-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.wa-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.wa-verified {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 12px;
+  height: 12px;
+  background: #fff;
+  border-radius: 50%;
+  color: var(--wa-dark-green);
+  font-size: 8px;
+  font-weight: 900;
+}
+
+.wa-status {
+  font-size: 10px;
+  color: rgba(255,255,255,0.75);
+  font-weight: 300;
+}
+
+.wa-icons {
+  display: flex;
+  gap: 14px;
+  color: #fff;
+  font-size: 14px;
+}
+
+/* WhatsApp body / chat */
+.wa-chat {
+  flex: 1;
+  background:
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.012) 0 1px, transparent 1px 14px),
+    var(--wa-bg);
+  padding: 14px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+}
+
+.wa-bubble {
+  max-width: 80%;
+  padding: 7px 10px 5px;
+  border-radius: 8px;
+  font-size: 11px;
+  line-height: 1.45;
+  font-weight: 400;
+  color: #111;
+  position: relative;
+  box-shadow: 0 1px 1px rgba(0,0,0,0.13);
+  word-wrap: break-word;
+}
+
+.wa-bubble.in {
+  background: #fff;
+  border-top-left-radius: 0;
+  align-self: flex-start;
+}
+
+.wa-bubble.in::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -8px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 8px 8px 0;
+  border-color: transparent #fff transparent transparent;
+}
+
+.wa-bubble.out {
+  background: var(--wa-bubble-out);
+  border-top-right-radius: 0;
+  align-self: flex-end;
+}
+
+.wa-bubble.out::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: -8px;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 0 8px 8px;
+  border-color: transparent transparent transparent var(--wa-bubble-out);
+}
+
+.wa-bubble strong { font-weight: 700; }
+.wa-bubble em { font-style: italic; color: #6b7c8a; }
+
+.wa-time {
+  font-size: 8.5px;
+  color: rgba(0,0,0,0.4);
+  display: inline-block;
+  margin-left: 6px;
+  font-weight: 400;
+}
+
+.wa-check {
+  color: #4FC3F7;
+  font-size: 9px;
+  margin-left: 2px;
+}
+
+/* WhatsApp template / list / cta */
+.wa-template-img {
+  margin: -3px -4px 4px;
+  height: 70px;
+  background: linear-gradient(135deg, var(--blip-blue), #4FB8FF);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  color: #fff;
+}
+
+.wa-cta-row {
+  margin: 4px -10px -5px;
+  border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+.wa-cta-btn {
+  display: block;
+  width: 100%;
+  padding: 7px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #1976D2;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+.wa-cta-btn:last-child { border-bottom: none; }
+
+.wa-list {
+  background: #fff;
+  border-radius: 8px;
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.wa-list-item {
+  padding: 8px 12px;
+  font-size: 11px;
+  color: #111;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.wa-list-item:last-child { border-bottom: none; }
+
+.wa-list-arrow {
+  color: var(--gray);
+  font-size: 12px;
+}
+
+/* WhatsApp input bar */
+.wa-input {
+  background: #f0f0f0;
+  padding: 7px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wa-input-field {
+  flex: 1;
+  background: #fff;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 11px;
+  color: var(--gray);
+}
+
+.wa-input-send {
+  width: 30px;
+  height: 30px;
+  background: var(--wa-dark-green);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 12px;
+}
+
+/* S3: PROPOSAL */
+.proposal-section {
+  background: linear-gradient(180deg, transparent 0%, rgba(0,150,250,0.04) 100%);
+}
+
+.proposal-intro {
+  max-width: 720px;
+  margin-bottom: 90px;
+}
+
+.proposal-text {
+  font-size: 17px;
+  font-weight: 300;
+  color: var(--gray);
+  line-height: 1.85;
+  margin-top: 30px;
+}
+
+.proposal-text strong { color: var(--white); font-weight: 500; }
+
+/* Use cases */
+.uc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.uc-item {
+  background: linear-gradient(135deg, rgba(0,150,250,0.04) 0%, rgba(0,150,250,0.01) 100%);
+  border: 1px solid rgba(0,150,250,0.1);
+  border-radius: 20px;
+  overflow: hidden;
+  transition: all 0.4s;
+}
+
+.uc-item.active {
+  border-color: var(--blip-blue);
+  background: linear-gradient(135deg, rgba(0,150,250,0.08) 0%, rgba(0,150,250,0.02) 100%);
+  box-shadow: 0 20px 60px rgba(0,150,250,0.1);
+}
+
+.uc-header {
+  padding: 36px 44px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.uc-number {
+  font-size: 56px;
+  font-weight: 200;
+  color: rgba(0,150,250,0.25);
+  line-height: 1;
+  flex-shrink: 0;
+  transition: all 0.3s;
+  letter-spacing: -0.04em;
+}
+
+.uc-item.active .uc-number {
+  color: var(--blip-blue);
+}
+
+.uc-meta {
+  flex: 1;
+}
+
+.uc-tag {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.3em;
+  color: var(--blip-blue);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.uc-name {
+  font-size: clamp(22px, 2.2vw, 32px);
+  font-weight: 300;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--white);
+}
+
+.uc-name strong {
+  font-weight: 600;
+  color: var(--blip-blue);
+}
+
+.uc-arrow {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,150,250,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  color: var(--blip-blue);
+  flex-shrink: 0;
+  transition: all 0.3s;
+}
+
+.uc-item.active .uc-arrow {
+  background: var(--blip-blue);
+  color: #000;
+  transform: rotate(45deg);
+}
+
+.uc-body {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.6s ease;
+}
+
+.uc-item.active .uc-body { max-height: 1400px; }
+
+.uc-body-inner {
+  padding: 0 44px 56px 44px;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 60px;
+  align-items: start;
+}
+
+.uc-content {
+  padding-top: 8px;
+}
+
+.uc-desc {
+  font-size: 15px;
+  font-weight: 300;
+  color: var(--gray);
+  line-height: 1.85;
+  margin-bottom: 28px;
+}
+
+.uc-desc strong { color: var(--white); font-weight: 500; }
+
+.uc-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.uc-features li {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--gray);
+  line-height: 1.7;
+  padding-left: 24px;
+  position: relative;
+}
+
+.uc-features li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 9px;
+  width: 12px;
+  height: 1px;
+  background: var(--blip-blue);
+}
+
+.uc-features li strong {
+  color: var(--white);
+  font-weight: 600;
+}
+
+/* CTA Final */
+.cta-section {
+  text-align: center;
+  padding: 180px 60px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 60% at 50% 50%, rgba(0,150,250,0.1), transparent);
+}
+
+.cta-eyebrow {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  color: var(--blip-blue);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.cta-title {
+  font-family: var(--font);
+  font-size: clamp(56px, 7vw, 110px);
+  font-weight: 200;
+  line-height: 1;
+  margin-bottom: 30px;
+  letter-spacing: -0.035em;
+  position: relative;
+}
+
+.cta-title strong {
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--blip-blue) 0%, #4FB8FF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cta-sub {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--gray);
+  max-width: 560px;
+  margin: 0 auto 56px;
+  line-height: 1.85;
+  position: relative;
+}
+
+/* CEO Section */
+.ceo-section {
+  padding: 140px 60px 100px;
+  position: relative;
+  overflow: hidden;
+}
+
+.ceo-section::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(0,150,250,0.06), transparent);
+  pointer-events: none;
+}
+
+.ceo-wrap {
+  max-width: 920px;
+  margin: 0 auto;
+  text-align: center;
+  position: relative;
+}
+
+.ceo-eyebrow {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.4em;
+  color: var(--blip-blue);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+}
+
+.ceo-eyebrow::before, .ceo-eyebrow::after {
+  content: '';
+  width: 40px;
+  height: 1px;
+  background: var(--blip-blue);
+  opacity: 0.5;
+}
+
+.ceo-title {
+  font-family: var(--font);
+  font-size: clamp(36px, 4.5vw, 60px);
+  font-weight: 200;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  margin-bottom: 28px;
+}
+
+.ceo-title strong {
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--blip-blue) 0%, #4FB8FF 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.ceo-title em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--white);
+  opacity: 0.9;
+}
+
+.ceo-sub {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--gray);
+  max-width: 600px;
+  margin: 0 auto 50px;
+  line-height: 1.8;
+}
+
+.ceo-video .video-wrapper {
+  padding-bottom: 56.25%;
+  border-radius: 16px;
+  box-shadow:
+    0 40px 100px rgba(0,0,0,0.55),
+    0 0 0 1px rgba(0,150,250,0.18),
+    0 0 80px rgba(0,150,250,0.12);
+}
+
+/* CTA Button — WhatsApp style */
+.cta-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 44px;
+  background: var(--blip-blue);
+  color: #000;
+  font-family: var(--font);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  border-radius: 60px;
+  transition: all 0.3s;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 0 50px rgba(0,150,250,0.4);
+}
+
+.cta-button:hover {
+  background: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 14px 70px rgba(0,150,250,0.65);
+}
+
+.cta-button-icon {
+  font-size: 18px;
+  display: inline-flex;
+}
+
+.cta-contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  margin-top: 60px;
+  flex-wrap: wrap;
+  position: relative;
+}
+
+.cta-contact-item {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: var(--gray);
+}
+
+.cta-contact-sep {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--blip-blue);
+}
+
+/* FOOTER */
+footer {
+  border-top: 1px solid rgba(0,150,250,0.1);
+  padding: 32px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.footer-left {
+  font-size: 11px;
+  font-weight: 300;
+  color: var(--gray-dim);
+  letter-spacing: 0.05em;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--blip-blue);
+  letter-spacing: 0.1em;
+}
+
+.footer-right span { color: var(--gray-dim); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.9s ease, transform 0.9s ease;
+}
+
+.reveal.visible { opacity: 1; transform: translateY(0); }
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .blip-grid { grid-template-columns: 1fr; gap: 50px; }
+  .case-item { grid-template-columns: 1fr; gap: 50px; padding: 60px 0; }
+  .case-item.reverse { direction: ltr; }
+  .uc-body-inner { grid-template-columns: 1fr; gap: 40px; }
+  .iphone { margin: 0 auto; }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .recognitions { grid-template-columns: 1fr; }
+  .recognition-item { border-right: none; border-bottom: 1px solid rgba(0,150,250,0.1); padding-bottom: 20px; }
+  .recognition-item:last-child { border-bottom: none; }
+}
+
+@media (max-width: 700px) {
+  nav { padding: 16px 24px; }
+  .nav-links { display: none; }
+  .nav-porsche { font-size: 11px; }
+  section { padding: 80px 24px; }
+  .hero { padding: 110px 24px 70px; }
+  .hero-meta { gap: 24px; font-size: 9px; bottom: 30px; padding: 0 24px; flex-wrap: wrap; justify-content: center; }
+  .uc-header { padding: 24px; gap: 20px; }
+  .uc-body-inner { padding: 0 24px 36px; }
+  .uc-number { font-size: 36px; }
+  .case-metrics { grid-template-columns: 1fr; }
+  .footer { padding: 24px; }
+  .blip-pillar { padding: 14px 16px; }
+  .ceo-section { padding: 80px 24px 60px; }
+  .recognitions { padding: 24px 20px; }
+  .cta-button { padding: 16px 28px; font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <span class="nav-blip">blip</span>
+    <div class="nav-sep"></div>
+    <span class="nav-porsche">Porsche Cup Brasil</span>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#blip">Blip</a></li>
+    <li><a href="#cases">Cases</a></li>
+    <li><a href="#proposal">Proposta</a></li>
+    <li><a href="#cta">Contato</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-orbit"></div>
+  <div class="hero-eyebrow">Inteligência Conversacional × Experiência Premium</div>
+  <h1 class="hero-title">
+    A pista da<br>
+    <strong>conversa perfeita.</strong>
+  </h1>
+  <p class="hero-sub">Assim como cada décimo de segundo conta na pista, cada interação conta na experiência do cliente. Transformando a Porsche Cup Brasil em referência de engajamento, operação e experiência premium.</p>
+  <div class="hero-meta">
+    <span><span style="color:var(--blip-blue);">●</span> Blip × Porsche Cup</span>
+  </div>
+</section>
+
+<!-- S1: BLIP -->
+<section class="blip-section" id="blip">
+  <div class="section-label reveal">01 — Sobre a Blip</div>
+  <h2 class="section-title reveal">
+    Os aplicativos de mensagens<br>
+    são o <strong>novo sistema operacional</strong><br>
+    das marcas.
+  </h2>
+
+  <div class="blip-grid">
+    <div>
+      <p class="blip-tagline reveal reveal-delay-1">
+        Uma plataforma unificada onde <strong>marketing, vendas e serviços</strong> convergem.
+      </p>
+
+      <p class="blip-text reveal reveal-delay-2">
+        Em uma frase: a Blip <strong>permite que clientes de uma marca conversem e resolvam tudo dentro do WhatsApp</strong> — e demais canais conversacionais — do começo ao fim.
+      </p>
+
+      <p class="blip-text reveal reveal-delay-2">
+        Somos parceiros oficiais Meta e líderes em soluções WhatsApp Business no Brasil e LATAM. Nossa plataforma de inteligência conversacional conecta empresas e pessoas, desbloqueando um novo patamar de operação:
+      </p>
+
+      <div class="blip-pillars reveal reveal-delay-3">
+        <div class="blip-pillar">
+          <div class="blip-pillar-icon">→</div>
+          <div class="blip-pillar-text"><span>Marketing mais inteligente</span> que impulsiona conversão</div>
+        </div>
+        <div class="blip-pillar">
+          <div class="blip-pillar-icon">→</div>
+          <div class="blip-pillar-text"><span>Transações sem atrito</span> que aumentam a eficiência</div>
+        </div>
+        <div class="blip-pillar">
+          <div class="blip-pillar-icon">→</div>
+          <div class="blip-pillar-text"><span>Crescimento</span> impulsionado por conversas em tempo real</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="video-stack reveal reveal-delay-2">
+      <div class="video-label">Conheça a Blip</div>
+      <div class="video-wrapper">
+        <iframe
+          src="https://www.youtube.com/embed/CGHqDYn-Oq4"
+          title="Sobre a Blip"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-section">
+    <div class="kpi-eyebrow reveal">Blip em números</div>
+    <div class="kpi-grid">
+      <div class="kpi-card reveal">
+        <div class="kpi-number">US$ 230M</div>
+        <div class="kpi-label">Em investimentos captados — Warburg Pincus, SoftBank, Microsoft e Accel</div>
+      </div>
+      <div class="kpi-card reveal reveal-delay-1">
+        <div class="kpi-number">+4k</div>
+        <div class="kpi-label">Clientes ativos no Brasil e LATAM</div>
+      </div>
+      <div class="kpi-card reveal reveal-delay-2">
+        <div class="kpi-number">+35</div>
+        <div class="kpi-label">Países onde a Blip atua hoje</div>
+      </div>
+      <div class="kpi-card reveal reveal-delay-3">
+        <div class="kpi-number">+1,4k</div>
+        <div class="kpi-label">Colaboradores espalhados por 3 países</div>
+      </div>
+    </div>
+
+    <div class="awards-block reveal">
+      <div class="awards-eyebrow">Últimos prêmios recebidos pela Meta</div>
+      <div class="recognitions">
+        <div class="recognition-item">
+          <div class="recognition-title">Finance Best-in-class</div>
+          <div class="recognition-meta">Use Case Maker · 2024</div>
+          <div class="recognition-desc">Reconhecimento como melhor solução conversacional do setor financeiro.</div>
+        </div>
+        <div class="recognition-item">
+          <div class="recognition-title">Click to WhatsApp</div>
+          <div class="recognition-meta">Most Relevant Player</div>
+          <div class="recognition-desc">Parceiro Meta com maior relevância em campanhas Click to WhatsApp.</div>
+        </div>
+        <div class="recognition-item">
+          <div class="recognition-title">Revenue Growth Spotlight</div>
+          <div class="recognition-meta">2023 &amp; 2024</div>
+          <div class="recognition-desc">Destaque pelo crescimento de receita gerado aos parceiros via WhatsApp.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- S2: CASES -->
+<section class="cases-section" id="cases">
+  <div class="section-label reveal">02 — Cases de Sucesso</div>
+  <div class="cases-intro">
+    <h2 class="section-title reveal">
+      Resultados que<br>
+      <strong>falam por si.</strong>
+    </h2>
+    <p class="reveal reveal-delay-1">As empresas mais admiradas do Brasil já transformaram suas operações com inteligência conversacional Blip. Quatro cases que demonstram a profundidade e amplitude do que podemos construir juntos.</p>
+  </div>
+
+  <!-- Cases reel video -->
+  <div class="cases-reel reveal">
+    <div class="video-label">Reel de cases · Blip</div>
+    <div class="video-wrapper">
+      <iframe
+        src="https://www.youtube.com/embed/espz7C_efxY"
+        title="Reel de cases Blip"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+        allowfullscreen></iframe>
+    </div>
+  </div>
+
+  <!-- CASE 1: COCA-COLA -->
+  <div class="case-item reveal">
+    <div>
+      <div class="case-brand">
+        <div class="case-brand-logo" style="background:#E61B1B;color:#fff;">CC</div>
+        <div>
+          <div class="case-brand-name">Coca-Cola Brasil</div>
+          <div class="case-brand-segment">Bens de Consumo · Marketing</div>
+        </div>
+      </div>
+      <h3 class="case-title">Áudios Mágicos: <strong>a magia do Natal</strong> aliada à tecnologia Blip</h3>
+      <p class="case-desc">Em parceria com Coca-Cola Brasil e Ogilvy, construímos a campanha "Áudios Mágicos" usando a assistente virtual <strong>KORA</strong>. O desafio: gravar um áudio de 15s cuja onda sonora reproduzisse o formato da clássica garrafa Coca-Cola. Quem vencia recebia gift cards iFood e concorria a R$10.000 no Magalu.</p>
+      <div class="case-resources">
+        <span class="case-chip">Inteligência Artificial</span>
+        <span class="case-chip">Engajamento</span>
+        <span class="case-chip">WhatsApp</span>
+      </div>
+      <div class="case-metrics">
+        <div>
+          <div class="case-metric-val">94 mil</div>
+          <div class="case-metric-lbl">Usuários únicos engajados em 20 dias</div>
+        </div>
+        <div>
+          <div class="case-metric-val">397 mil</div>
+          <div class="case-metric-lbl">Áudios recebidos pela KORA</div>
+        </div>
+        <div>
+          <div class="case-metric-val">+4 mi</div>
+          <div class="case-metric-lbl">Mensagens trafegadas</div>
+        </div>
+      </div>
+    </div>
+    <div class="case-visual">
+      <div class="video-label">Case em vídeo</div>
+      <div class="case-visual-video">
+        <iframe src="https://www.youtube.com/embed/ouZcNnwSi5k" title="Coca-Cola Áudios Mágicos" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE 2: NESPRESSO -->
+  <div class="case-item reverse reveal">
+    <div>
+      <div class="case-brand">
+        <div class="case-brand-logo" style="background:#1F1F1F;color:#C9A24C;">N</div>
+        <div>
+          <div class="case-brand-name">Nespresso</div>
+          <div class="case-brand-segment">Bens de Consumo · Commerce</div>
+        </div>
+      </div>
+      <h3 class="case-title">Café em um Blip: Nespresso aposta em <strong>compra 100% automatizada</strong></h3>
+      <p class="case-desc">Marca pioneira em cafés porcionados passou a vender cápsulas via WhatsApp com a Blip. Aperfeiçoamos o fluxo de vendas, implementamos catálogo de produtos para exposição visual intuitiva, e desenvolvemos um <strong>assistente virtual</strong> que acompanha o usuário em toda a jornada de compra.</p>
+      <div class="case-resources">
+        <span class="case-chip">Notificações Ativas</span>
+        <span class="case-chip">Click 2 WhatsApp</span>
+        <span class="case-chip">Catálogo de Produtos</span>
+        <span class="case-chip">Campanhas e Dados</span>
+      </div>
+      <div class="case-metrics">
+        <div>
+          <div class="case-metric-val">57,6%</div>
+          <div class="case-metric-lbl">Conversão pagamento → compra efetivada</div>
+        </div>
+        <div>
+          <div class="case-metric-val">63,9%</div>
+          <div class="case-metric-lbl">Conversão na Gifting Friday 2022</div>
+        </div>
+        <div>
+          <div class="case-metric-val">72,9%</div>
+          <div class="case-metric-lbl">Conversão durante o Natal 2022</div>
+        </div>
+      </div>
+    </div>
+    <div class="case-visual">
+      <!-- Mockup Nespresso -->
+      <div class="iphone" style="filter: drop-shadow(0 30px 80px rgba(0,0,0,0.6));">
+        <div class="iphone-frame">
+          <div class="iphone-notch"></div>
+          <div class="iphone-screen">
+            <div class="iphone-statusbar">
+              <span>9:41</span>
+              <span>● ● ●</span>
+            </div>
+            <div class="wa-header">
+              <div class="wa-back">‹</div>
+              <div class="wa-avatar" style="background:#1F1F1F;color:#C9A24C;">N</div>
+              <div class="wa-info">
+                <div class="wa-name">Nespresso <span class="wa-verified">✓</span></div>
+                <div class="wa-status">online</div>
+              </div>
+              <div class="wa-icons">📞 ⋮</div>
+            </div>
+            <div class="wa-chat">
+              <div class="wa-bubble in">Bonjour! Bem-vindo ao seu Maestro Nespresso ☕<br>Como posso te ajudar hoje?<span class="wa-time">14:22</span></div>
+              <div class="wa-bubble in">
+                <div class="wa-list">
+                  <div class="wa-list-item">☕ Comprar cápsulas <span class="wa-list-arrow">›</span></div>
+                  <div class="wa-list-item">📦 Acompanhar pedido <span class="wa-list-arrow">›</span></div>
+                  <div class="wa-list-item">⭐ Programa Ambassador <span class="wa-list-arrow">›</span></div>
+                </div>
+                <span class="wa-time">14:22</span>
+              </div>
+              <div class="wa-bubble out">Quero comprar cápsulas <span class="wa-time">14:23 <span class="wa-check">✓✓</span></span></div>
+              <div class="wa-bubble in">Perfeito! Veja nossas linhas exclusivas:<br><br><strong>Vertuo Origem</strong> · R$ 2,90/cáp<br><strong>Ispirazione Roma</strong> · R$ 2,50/cáp<br><strong>Vivalto Lungo</strong> · R$ 2,30/cáp<span class="wa-time">14:23</span></div>
+              <div class="wa-bubble in" style="padding:0;overflow:hidden;">
+                <div class="wa-template-img" style="background:linear-gradient(135deg,#1F1F1F,#3a2a1a);color:#C9A24C;">☕</div>
+                <div style="padding:8px 10px 4px;">
+                  <strong>Catálogo completo</strong><br>
+                  <span style="font-size:10px;color:#666;">Mais de 30 variedades disponíveis</span>
+                </div>
+                <div class="wa-cta-row">
+                  <div class="wa-cta-btn">🛒 Ver catálogo completo</div>
+                </div>
+                <span class="wa-time" style="padding:0 10px 5px;display:block;">14:23</span>
+              </div>
+            </div>
+            <div class="wa-input">
+              <div class="wa-input-field">Mensagem</div>
+              <div class="wa-input-send">▶</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE 3: IFOOD -->
+  <div class="case-item reveal">
+    <div>
+      <div class="case-brand">
+        <div class="case-brand-logo" style="background:#EA1D2C;color:#fff;">iF</div>
+        <div>
+          <div class="case-brand-name">iFood</div>
+          <div class="case-brand-segment">Tecnologia · Onboarding B2B</div>
+        </div>
+      </div>
+      <h3 class="case-title">Como o iFood revolucionou o WhatsApp em <strong>canal campeão de conversão</strong> de novos parceiros</h3>
+      <p class="case-desc">Para melhorar o cadastro de novos restaurantes, criamos um fluxo automatizado de <strong>Self Sign In</strong> no WhatsApp, oferecendo total autonomia ao parceiro e melhor experiência mobile. Atrelamos o ChatGPT à plataforma para montar cardápios automatizados — <strong>destravando 34,6% dos parceiros</strong> que não tinham cardápio.</p>
+      <div class="case-resources">
+        <span class="case-chip">Self Sign In</span>
+        <span class="case-chip">IA + ChatGPT</span>
+        <span class="case-chip">CSAT 97,60%</span>
+      </div>
+      <div class="case-metrics">
+        <div>
+          <div class="case-metric-val">+26%</div>
+          <div class="case-metric-lbl">Conversão direta no fluxo automatizado</div>
+        </div>
+        <div>
+          <div class="case-metric-val">97,6%</div>
+          <div class="case-metric-lbl">CSAT no atendimento via WhatsApp</div>
+        </div>
+        <div>
+          <div class="case-metric-val">−76,6%</div>
+          <div class="case-metric-lbl">Redução de abandono no fluxo</div>
+        </div>
+      </div>
+    </div>
+    <div class="case-visual">
+      <!-- Mockup iFood -->
+      <div class="iphone">
+        <div class="iphone-frame">
+          <div class="iphone-notch"></div>
+          <div class="iphone-screen">
+            <div class="iphone-statusbar">
+              <span>9:41</span>
+              <span>● ● ●</span>
+            </div>
+            <div class="wa-header">
+              <div class="wa-back">‹</div>
+              <div class="wa-avatar" style="background:#EA1D2C;color:#fff;">iF</div>
+              <div class="wa-info">
+                <div class="wa-name">iFood Parceiros <span class="wa-verified">✓</span></div>
+                <div class="wa-status">conta comercial</div>
+              </div>
+              <div class="wa-icons">📞 ⋮</div>
+            </div>
+            <div class="wa-chat">
+              <div class="wa-bubble in">Olá! 🛵 Quer cadastrar seu restaurante no iFood?<br>Te guio em 4 passos simples<span class="wa-time">10:15</span></div>
+              <div class="wa-bubble out">Quero começar! <span class="wa-time">10:15 <span class="wa-check">✓✓</span></span></div>
+              <div class="wa-bubble in">Perfeito! Vamos começar pelo CNPJ<br>Pode digitar abaixo 👇<span class="wa-time">10:15</span></div>
+              <div class="wa-bubble out">12.345.678/0001-90 <span class="wa-time">10:16 <span class="wa-check">✓✓</span></span></div>
+              <div class="wa-bubble in"><strong>✓ CNPJ validado</strong><br><strong>Pizzaria do João</strong><br>São Paulo · SP<br><br>Agora vamos montar seu cardápio com IA. Me envie uma foto ou texto do menu atual<span class="wa-time">10:16</span></div>
+              <div class="wa-bubble in" style="padding:0;overflow:hidden;">
+                <div class="wa-template-img" style="background:linear-gradient(135deg,#EA1D2C,#FF6B6B);">🍕</div>
+                <div style="padding:8px 10px;">
+                  <strong>Cardápio gerado por IA</strong><br>
+                  <span style="font-size:10px;color:#666;">12 itens identificados, prontos para revisão</span>
+                </div>
+                <div class="wa-cta-row">
+                  <div class="wa-cta-btn" style="color:#EA1D2C;">Revisar cardápio</div>
+                </div>
+                <span class="wa-time" style="padding:0 10px 5px;display:block;">10:18</span>
+              </div>
+            </div>
+            <div class="wa-input">
+              <div class="wa-input-field">Mensagem</div>
+              <div class="wa-input-send">▶</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CASE 4: STELLANTIS -->
+  <div class="case-item reverse reveal">
+    <div>
+      <div class="case-brand">
+        <div class="case-brand-logo" style="background:#1A237E;color:#fff;">S</div>
+        <div>
+          <div class="case-brand-name">Stellantis</div>
+          <div class="case-brand-segment">Automotivo · Vendas Digitais</div>
+        </div>
+      </div>
+      <h3 class="case-title">Como a Stellantis usou os anúncios <strong>Click to WhatsApp</strong> na sua estratégia</h3>
+      <p class="case-desc">A Stellantis utilizou campanhas de anúncios <strong>Click to WhatsApp (CTW)</strong> para direcionar usuários para o Contato Inteligente Blip, oferecendo total autonomia: agendamento de test drive, consulta de concessionárias, acesso ao catálogo e detalhes dos modelos, e atendimento humano com consultor de vendas.</p>
+      <div class="case-resources">
+        <span class="case-chip">Click to WhatsApp</span>
+        <span class="case-chip">Test Drive</span>
+        <span class="case-chip">Geração de Leads</span>
+        <span class="case-chip">CRM Integrado</span>
+      </div>
+      <div class="case-metrics">
+        <div>
+          <div class="case-metric-val">50%</div>
+          <div class="case-metric-lbl">Vendas digitais vêm do WhatsApp</div>
+        </div>
+        <div>
+          <div class="case-metric-val">+45%</div>
+          <div class="case-metric-lbl">Incremento na geração de leads</div>
+        </div>
+        <div>
+          <div class="case-metric-val">−50%</div>
+          <div class="case-metric-lbl">CPA menor que outros canais</div>
+        </div>
+      </div>
+    </div>
+    <div class="case-visual">
+      <div class="video-label">Case em vídeo</div>
+      <div class="case-visual-video">
+        <iframe src="https://www.youtube.com/embed/xzn6S_FLKO8" title="Stellantis Case Blip" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- S3: PROPOSAL -->
+<section class="proposal-section" id="proposal">
+  <div class="section-label reveal">03 — Porsche Cup × Blip</div>
+  <div class="proposal-intro">
+    <h2 class="section-title reveal">
+      Como a Porsche Cup<br>
+      pode <strong>conversar melhor.</strong>
+    </h2>
+    <p class="proposal-text reveal reveal-delay-1">
+      A Porsche Cup Brasil já entrega uma experiência de classe mundial na pista. Nossa proposta é <strong>estender essa experiência premium para o canal onde seus pilotos, convidados e fãs já estão</strong> — o WhatsApp. Com facilidade de implementação, integrações nativas e resultados de negócio mensuráveis desde a primeira etapa.
+    </p>
+  </div>
+
+  <div class="uc-list">
+
+    <!-- UC1: TRANSACIONAL -->
+    <div class="uc-item active" onclick="toggleUC(this)">
+      <div class="uc-header">
+        <div class="uc-number">01</div>
+        <div class="uc-meta">
+          <div class="uc-tag">Caso de Uso · Comunicação &amp; Operações</div>
+          <div class="uc-name">Hub <strong>Transacional</strong> Oficial</div>
+        </div>
+        <div class="uc-arrow">+</div>
+      </div>
+      <div class="uc-body">
+        <div class="uc-body-inner">
+          <div class="uc-content">
+            <p class="uc-desc">
+              Todo o <strong>ecossistema de comunicação da Porsche Cup</strong> centralizado no WhatsApp. Do registro de acesso aos paddocks até os sorteios de prêmios — uma experiência fluida, digital e à altura da marca.
+            </p>
+            <ul class="uc-features">
+              <li><strong>Registro facial e QR Code:</strong> entrada em boxes e áreas VIP com validação automática e antifraude</li>
+              <li><strong>Notificações proativas:</strong> horários de treino, grid de largada, briefings de segurança e resultados em tempo real</li>
+              <li><strong>Jornadas gamificadas:</strong> acumule pontos por presença, interações e conquistas para resgatar experiências exclusivas</li>
+              <li><strong>Mecânica de sorteios:</strong> inscrição transparente e resultado via WhatsApp, com validação anti-fraude</li>
+              <li><strong>Suporte ao evento:</strong> dúvidas sobre credenciamento, transporte e agenda resolvidas pelo bot 24/7</li>
+            </ul>
+          </div>
+          <div class="iphone">
+            <div class="iphone-frame">
+              <div class="iphone-notch"></div>
+              <div class="iphone-screen">
+                <div class="iphone-statusbar">
+                  <span>9:41</span>
+                  <span>● ● ●</span>
+                </div>
+                <div class="wa-header">
+                  <div class="wa-back">‹</div>
+                  <div class="wa-avatar" style="background:#000;color:#D5001C;">PC</div>
+                  <div class="wa-info">
+                    <div class="wa-name">Porsche Cup BR <span class="wa-verified">✓</span></div>
+                    <div class="wa-status">conta oficial</div>
+                  </div>
+                  <div class="wa-icons">📞 ⋮</div>
+                </div>
+                <div class="wa-chat">
+                  <div class="wa-bubble in"><strong>🏁 Bom dia, Ricardo!</strong><br><br>Etapa Interlagos começa em 2h. Seu ingresso VIP Paddock está confirmado.<span class="wa-time">07:15</span></div>
+                  <div class="wa-bubble in" style="padding:0;overflow:hidden;">
+                    <div class="wa-template-img" style="background:linear-gradient(135deg,#000,#1a1a1a);color:#D5001C;">🏎️</div>
+                    <div style="padding:8px 10px 4px;">
+                      <strong>Sua agenda · Etapa 04</strong><br>
+                      <span style="font-size:10px;color:#666;">📍 Gate 3 — Acesso Direto</span><br>
+                      <span style="font-size:10px;color:#666;">⏰ Portões: 08h00</span><br>
+                      <span style="font-size:10px;color:#666;">🚦 Treino Livre 1: 10h30</span>
+                    </div>
+                    <div class="wa-cta-row">
+                      <div class="wa-cta-btn">📲 Ver QR Code de acesso</div>
+                      <div class="wa-cta-btn">🗺️ Como chegar ao Gate 3</div>
+                    </div>
+                    <span class="wa-time" style="padding:0 10px 5px;display:block;">07:15 <span class="wa-check">✓✓</span></span>
+                  </div>
+                  <div class="wa-bubble out">Já estou indo! 🏁 <span class="wa-time">07:18 <span class="wa-check">✓✓</span></span></div>
+                </div>
+                <div class="wa-input">
+                  <div class="wa-input-field">Mensagem</div>
+                  <div class="wa-input-send">▶</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UC2: NETWORKING -->
+    <div class="uc-item" onclick="toggleUC(this)">
+      <div class="uc-header">
+        <div class="uc-number">02</div>
+        <div class="uc-meta">
+          <div class="uc-tag">Caso de Uso · Experiência Social</div>
+          <div class="uc-name"><strong>Speed Match</strong> · Networking Premium</div>
+        </div>
+        <div class="uc-arrow">+</div>
+      </div>
+      <div class="uc-body">
+        <div class="uc-body-inner">
+          <div class="uc-content">
+            <p class="uc-desc">
+              A Porsche Cup reúne CEOs, empreendedores, investidores e entusiastas de alto padrão. <strong>Essa rede tem valor latente enorme</strong> — e o WhatsApp pode ser o catalisador. Nossa proposta de networking é tão premium quanto o evento.
+            </p>
+            <ul class="uc-features">
+              <li><strong>Speed Match:</strong> bot pergunta seus interesses (negócios, investimento, lifestyle, motorsport) e cruza com outros perfis — você recebe 2-3 apresentações personalizadas durante a etapa</li>
+              <li><strong>Cartão Digital Premium:</strong> troca de contato via QR Code — nome, empresa, LinkedIn e "o que busco aqui" em formato elegante</li>
+              <li><strong>Agenda no Paddock:</strong> reserve um slot de 15min em área exclusiva de networking, confirmado pelo bot</li>
+              <li><strong>Grupo Oficial da Edição:</strong> link exclusivo, moderado, com regras de qualidade — disparado via notificação ativa</li>
+              <li><strong>Resumo pós-evento:</strong> "Você se conectou com X pessoas esta etapa" + sugestão de follow-up</li>
+            </ul>
+          </div>
+          <div class="iphone">
+            <div class="iphone-frame">
+              <div class="iphone-notch"></div>
+              <div class="iphone-screen">
+                <div class="iphone-statusbar">
+                  <span>9:41</span>
+                  <span>● ● ●</span>
+                </div>
+                <div class="wa-header">
+                  <div class="wa-back">‹</div>
+                  <div class="wa-avatar" style="background:#000;color:#D5001C;">PC</div>
+                  <div class="wa-info">
+                    <div class="wa-name">Porsche Cup Connect <span class="wa-verified">✓</span></div>
+                    <div class="wa-status">networking ativo</div>
+                  </div>
+                  <div class="wa-icons">📞 ⋮</div>
+                </div>
+                <div class="wa-chat">
+                  <div class="wa-bubble in"><strong>🤝 Speed Match ativado!</strong><br><br>Encontramos um match para você nesta etapa.<span class="wa-time">11:32</span></div>
+                  <div class="wa-bubble in" style="padding:0;overflow:hidden;">
+                    <div class="wa-template-img" style="background:linear-gradient(135deg,#0F2540,#0096FA);">👤</div>
+                    <div style="padding:8px 10px 4px;">
+                      <strong>André Fonseca</strong><br>
+                      <span style="font-size:10px;color:#666;">CEO · Fonseca Capital</span><br><br>
+                      <span style="font-size:10px;color:#444;">"Aqui para fazer networking premium e curtir as corridas. Interesso por private equity e ESG."</span><br><br>
+                      <span style="font-size:10px;color:#0096FA;font-weight:600;">★ 87% match · 3 interesses em comum</span>
+                    </div>
+                    <div class="wa-cta-row">
+                      <div class="wa-cta-btn">🤝 Agendar encontro no Paddock</div>
+                      <div class="wa-cta-btn">💼 Ver cartão digital</div>
+                    </div>
+                    <span class="wa-time" style="padding:0 10px 5px;display:block;">11:32 <span class="wa-check">✓✓</span></span>
+                  </div>
+                  <div class="wa-bubble out">Vamos agendar! <span class="wa-time">11:35 <span class="wa-check">✓✓</span></span></div>
+                </div>
+                <div class="wa-input">
+                  <div class="wa-input-field">Mensagem</div>
+                  <div class="wa-input-send">▶</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UC3: MONETIZAÇÃO -->
+    <div class="uc-item" onclick="toggleUC(this)">
+      <div class="uc-header">
+        <div class="uc-number">03</div>
+        <div class="uc-meta">
+          <div class="uc-tag">Caso de Uso · Revenue</div>
+          <div class="uc-name">Monetização &amp; <strong>Patrocínio Digital</strong></div>
+        </div>
+        <div class="uc-arrow">+</div>
+      </div>
+      <div class="uc-body">
+        <div class="uc-body-inner">
+          <div class="uc-content">
+            <p class="uc-desc">
+              Um novo inventário premium para marcas patrocinadoras — <strong>conversas ativadas dentro do contexto do evento</strong>, com audiência qualificada e opt-in garantido. Diferente de banner: aqui a marca realmente conversa.
+            </p>
+            <ul class="uc-features">
+              <li><strong>Pacote "Sponsor Flow":</strong> marca contrata disparo ativo para base da Porsche Cup com fluxo exclusivo de ativação (quiz, sorteio, oferta, conteúdo)</li>
+              <li><strong>Geração de leads qualificados:</strong> bot captura CPF, e-mail, interesse de compra — entregue ao CRM do patrocinador</li>
+              <li><strong>Branded experience:</strong> flow tem visual e tom da marca, mas entregue pelo canal oficial Porsche Cup — emprestando credibilidade</li>
+              <li><strong>Métricas em tempo real:</strong> taxa de abertura, clique, conversão e custo por lead — relatório executivo pós-etapa</li>
+              <li><strong>Upsell premium:</strong> marcas podem ter "bot day" exclusivo com story ativo, acesso ao grupo e presença no paddock digital</li>
+            </ul>
+          </div>
+          <div class="iphone">
+            <div class="iphone-frame">
+              <div class="iphone-notch"></div>
+              <div class="iphone-screen">
+                <div class="iphone-statusbar">
+                  <span>9:41</span>
+                  <span>● ● ●</span>
+                </div>
+                <div class="wa-header">
+                  <div class="wa-back">‹</div>
+                  <div class="wa-avatar" style="background:#000;color:#D5001C;">PC</div>
+                  <div class="wa-info">
+                    <div class="wa-name">Porsche Cup × Moët <span class="wa-verified">✓</span></div>
+                    <div class="wa-status">ativação exclusiva</div>
+                  </div>
+                  <div class="wa-icons">📞 ⋮</div>
+                </div>
+                <div class="wa-chat">
+                  <div class="wa-bubble in"><strong>🥂 Parceiro exclusivo da etapa!</strong><br><br>A Moët &amp; Chandon te convida para uma degustação privada no hospitality.<span class="wa-time">13:42</span></div>
+                  <div class="wa-bubble in" style="padding:0;overflow:hidden;">
+                    <div class="wa-template-img" style="background:linear-gradient(135deg,#1a1a1a,#3a2a0a);color:#C9A24C;">🥂</div>
+                    <div style="padding:8px 10px 4px;">
+                      <strong>Quiz Moët</strong><br>
+                      <span style="font-size:11px;color:#444;">Qual piloto vence hoje?<br>Acerte e concorra a uma garrafa Imperial 75cl.</span>
+                    </div>
+                    <div class="wa-cta-row">
+                      <div class="wa-cta-btn">🏎️ Carro #11 — Drugovich</div>
+                      <div class="wa-cta-btn">🏎️ Carro #07 — Werner</div>
+                      <div class="wa-cta-btn">🏎️ Carro #22 — Marques</div>
+                    </div>
+                    <span class="wa-time" style="padding:0 10px 5px;display:block;">13:42 <span class="wa-check">✓✓</span></span>
+                  </div>
+                  <div class="wa-bubble out">Carro #11 🏆 <span class="wa-time">13:43 <span class="wa-check">✓✓</span></span></div>
+                  <div class="wa-bubble in"><strong>✓ Inscrito!</strong><br>Resultado anunciado após o pódio. Boa sorte! 🥂<span class="wa-time">13:43</span></div>
+                </div>
+                <div class="wa-input">
+                  <div class="wa-input-field">Mensagem</div>
+                  <div class="wa-input-send">▶</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UC4: PADDOCK -->
+    <div class="uc-item" onclick="toggleUC(this)">
+      <div class="uc-header">
+        <div class="uc-number">04</div>
+        <div class="uc-meta">
+          <div class="uc-tag">Caso de Uso · Imersão</div>
+          <div class="uc-name">Experiência <strong>Imersiva</strong> no Paddock</div>
+        </div>
+        <div class="uc-arrow">+</div>
+      </div>
+      <div class="uc-body">
+        <div class="uc-body-inner">
+          <div class="uc-content">
+            <p class="uc-desc">
+              Cada carro, box e espaço VIP vira um <strong>portal de conteúdo premium ativado pelo WhatsApp</strong>. Um QR code discreto e elegante que abre um universo de informações exclusivas — sem app, sem fricção.
+            </p>
+            <ul class="uc-features">
+              <li><strong>QR nos carros:</strong> história do piloto, ficha técnica do veículo, melhores momentos da temporada em vídeo</li>
+              <li><strong>QR nos boxes:</strong> bastidores da preparação, entrevista exclusiva do engenheiro-chefe, telemetria simplificada</li>
+              <li><strong>Áreas VIP:</strong> menu do hospitality, programação de atividades, conteúdo behind-the-scenes</li>
+              <li><strong>Trilha sonora oficial:</strong> playlist da etapa acessível pelo WhatsApp</li>
+              <li><strong>Modo "Jornalista":</strong> fãs enviam perguntas para os pilotos via bot — melhores perguntas usadas na coletiva</li>
+            </ul>
+          </div>
+          <div class="iphone">
+            <div class="iphone-frame">
+              <div class="iphone-notch"></div>
+              <div class="iphone-screen">
+                <div class="iphone-statusbar">
+                  <span>9:41</span>
+                  <span>● ● ●</span>
+                </div>
+                <div class="wa-header">
+                  <div class="wa-back">‹</div>
+                  <div class="wa-avatar" style="background:#000;color:#D5001C;">PC</div>
+                  <div class="wa-info">
+                    <div class="wa-name">Porsche Cup Paddock <span class="wa-verified">✓</span></div>
+                    <div class="wa-status">carro #07 desbloqueado</div>
+                  </div>
+                  <div class="wa-icons">📞 ⋮</div>
+                </div>
+                <div class="wa-chat">
+                  <div class="wa-bubble in"><strong>🏎️ Carro #07 desbloqueado!</strong><br><br>Você acabou de escanear o veículo de Werner Neugebauer.<span class="wa-time">14:08</span></div>
+                  <div class="wa-bubble in" style="padding:0;overflow:hidden;">
+                    <div class="wa-template-img" style="background:linear-gradient(135deg,#1a1a1a,#D5001C);">🏎️</div>
+                    <div style="padding:8px 10px 4px;">
+                      <strong>Werner Neugebauer · #07</strong><br>
+                      <span style="font-size:10px;color:#666;">Motor: 3.8L Flat-6 · 485cv</span><br>
+                      <span style="font-size:10px;color:#666;">Temporadas: 4 · Vitórias 2024: 3</span><br>
+                      <span style="font-size:10px;color:#666;">Pole atual: P3</span>
+                    </div>
+                    <div class="wa-cta-row">
+                      <div class="wa-cta-btn">▶️ Ver highlight da última corrida</div>
+                      <div class="wa-cta-btn">📊 Ver telemetria simplificada</div>
+                      <div class="wa-cta-btn">🎤 Fazer pergunta ao piloto</div>
+                    </div>
+                    <span class="wa-time" style="padding:0 10px 5px;display:block;">14:08 <span class="wa-check">✓✓</span></span>
+                  </div>
+                  <div class="wa-bubble out">Telemetria por favor 📊 <span class="wa-time">14:09 <span class="wa-check">✓✓</span></span></div>
+                </div>
+                <div class="wa-input">
+                  <div class="wa-input-field">Mensagem</div>
+                  <div class="wa-input-send">▶</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UC5: PÓS EVENTO -->
+    <div class="uc-item" onclick="toggleUC(this)">
+      <div class="uc-header">
+        <div class="uc-number">05</div>
+        <div class="uc-meta">
+          <div class="uc-tag">Caso de Uso · Conteúdo</div>
+          <div class="uc-name">Memórias <strong>Personalizadas</strong> Pós-Etapa</div>
+        </div>
+        <div class="uc-arrow">+</div>
+      </div>
+      <div class="uc-body">
+        <div class="uc-body-inner">
+          <div class="uc-content">
+            <p class="uc-desc">
+              O evento acaba na pista, mas a experiência <strong>continua no celular</strong>. Distribuição automatizada de fotos, vídeos e recordações personalizadas — o conteúdo certo, para a pessoa certa, no momento certo.
+            </p>
+            <ul class="uc-features">
+              <li><strong>Álbum personalizado:</strong> envio automático de fotos do participante captadas no evento (via integração com fotógrafo oficial) — com marca d'água do patrocinador</li>
+              <li><strong>Resumo personalizado:</strong> "Você esteve em X etapas esta temporada, assistiu Y corridas" — engajamento de longo prazo</li>
+              <li><strong>Clipe exclusivo:</strong> 30s com os melhores momentos da etapa que o participante viveu</li>
+              <li><strong>Certificado digital:</strong> de presença para etapas especiais — compartilhável nas redes</li>
+              <li><strong>Pré-venda antecipada:</strong> primeiro aviso para quem esteve presente sobre próxima etapa</li>
+            </ul>
+          </div>
+          <div class="iphone">
+            <div class="iphone-frame">
+              <div class="iphone-notch"></div>
+              <div class="iphone-screen">
+                <div class="iphone-statusbar">
+                  <span>9:41</span>
+                  <span>● ● ●</span>
+                </div>
+                <div class="wa-header">
+                  <div class="wa-back">‹</div>
+                  <div class="wa-avatar" style="background:#000;color:#D5001C;">PC</div>
+                  <div class="wa-info">
+                    <div class="wa-name">Porsche Cup BR <span class="wa-verified">✓</span></div>
+                    <div class="wa-status">suas memórias de Interlagos</div>
+                  </div>
+                  <div class="wa-icons">📞 ⋮</div>
+                </div>
+                <div class="wa-chat">
+                  <div class="wa-bubble in"><strong>📸 Suas fotos de Interlagos chegaram!</strong><br><br>Capturamos 12 momentos seus durante a Etapa 04. Tudo pronto para você lembrar deste dia 🏁<span class="wa-time">19:22</span></div>
+                  <div class="wa-bubble in" style="padding:0;overflow:hidden;">
+                    <div class="wa-template-img" style="background:linear-gradient(135deg,#000,#D5001C);">📷</div>
+                    <div style="padding:8px 10px 4px;">
+                      <strong>Álbum exclusivo</strong><br>
+                      <span style="font-size:10px;color:#666;">12 fotos · 1 vídeo highlight 30s</span><br>
+                      <span style="font-size:10px;color:#666;">Etapa 04 · Interlagos · 27 abr</span>
+                    </div>
+                    <div class="wa-cta-row">
+                      <div class="wa-cta-btn">📥 Baixar álbum completo</div>
+                      <div class="wa-cta-btn">▶️ Ver vídeo highlight</div>
+                      <div class="wa-cta-btn">📤 Compartilhar nas redes</div>
+                    </div>
+                    <span class="wa-time" style="padding:0 10px 5px;display:block;">19:22 <span class="wa-check">✓✓</span></span>
+                  </div>
+                  <div class="wa-bubble in" style="font-size:10px;color:#666;">Esta etapa foi patrocinada por <strong>Moët &amp; Chandon</strong><span class="wa-time">19:22</span></div>
+                </div>
+                <div class="wa-input">
+                  <div class="wa-input-field">Mensagem</div>
+                  <div class="wa-input-send">▶</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- UC6: FÃS -->
+    <div class="uc-item" onclick="toggleUC(this)">
+      <div class="uc-header">
+        <div class="uc-number">06</div>
+        <div class="uc-meta">
+          <div class="uc-tag">Caso de Uso · Fidelidade</div>
+          <div class="uc-name">Programa de <strong>Fãs da Temporada</strong></div>
+        </div>
+        <div class="uc-arrow">+</div>
+      </div>
+      <div class="uc-body">
+        <div class="uc-body-inner">
+          <div class="uc-content">
+            <p class="uc-desc">
+              Transformar presença pontual em <strong>fandom de longo prazo</strong>. Um programa conversacional que acompanha o fã durante toda a temporada, reconhece sua dedicação e cria pertencimento à cultura Porsche Cup.
+            </p>
+            <ul class="uc-features">
+              <li><strong>Ranking de fãs:</strong> presença em etapas, engajamento no bot, participação em ativações — tudo pontuado</li>
+              <li><strong>Badges colecionáveis:</strong> "Presença em Interlagos", "Fã da virada", "Super Fã da Temporada" — gamificação elegante</li>
+              <li><strong>Acesso prioritário:</strong> top fãs recebem primeiro o link de ingresso das próximas etapas e convites para ativações VIP</li>
+              <li><strong>Conteúdo exclusivo:</strong> news, bastidores e conteúdos da temporada via WhatsApp para quem está no programa</li>
+              <li><strong>Encerramento de temporada:</strong> entrega de prêmio para o "Fã do Ano" com experiência premium no paddock</li>
+            </ul>
+          </div>
+          <div class="iphone">
+            <div class="iphone-frame">
+              <div class="iphone-notch"></div>
+              <div class="iphone-screen">
+                <div class="iphone-statusbar">
+                  <span>9:41</span>
+                  <span>● ● ●</span>
+                </div>
+                <div class="wa-header">
+                  <div class="wa-back">‹</div>
+                  <div class="wa-avatar" style="background:#000;color:#D5001C;">PC</div>
+                  <div class="wa-info">
+                    <div class="wa-name">Porsche Cup Fãs <span class="wa-verified">✓</span></div>
+                    <div class="wa-status">temporada 2025</div>
+                  </div>
+                  <div class="wa-icons">📞 ⋮</div>
+                </div>
+                <div class="wa-chat">
+                  <div class="wa-bubble in"><strong>🏆 Seu ranking esta temporada</strong><span class="wa-time">09:15</span></div>
+                  <div class="wa-bubble in" style="padding:0;overflow:hidden;">
+                    <div class="wa-template-img" style="background:linear-gradient(135deg,#000,#0096FA);">🏆</div>
+                    <div style="padding:8px 10px 4px;">
+                      <strong>Ricardo · "Fiel da Pista"</strong><br>
+                      <span style="font-size:10px;color:#666;">📍 Posição: #47 de 1.200 fãs</span><br>
+                      <span style="font-size:10px;color:#666;">⭐ Pontos: 840 / 1.000</span><br>
+                      <span style="font-size:10px;color:#666;">🎖️ Badges: 5 desbloqueados</span><br><br>
+                      <span style="font-size:10px;color:#0096FA;font-weight:600;">A 160 pts do acesso VIP da etapa final 🏁</span>
+                    </div>
+                    <div class="wa-cta-row">
+                      <div class="wa-cta-btn">📊 Ver perfil completo</div>
+                      <div class="wa-cta-btn">🎯 Como ganhar mais pontos</div>
+                      <div class="wa-cta-btn">🎁 Ver recompensas disponíveis</div>
+                    </div>
+                    <span class="wa-time" style="padding:0 10px 5px;display:block;">09:15 <span class="wa-check">✓✓</span></span>
+                  </div>
+                </div>
+                <div class="wa-input">
+                  <div class="wa-input-field">Mensagem</div>
+                  <div class="wa-input-send">▶</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CEO NYSE Video block -->
+<section class="ceo-section" id="ceo">
+  <div class="ceo-wrap">
+    <div class="ceo-eyebrow reveal">Blip no mundo</div>
+    <h2 class="ceo-title reveal reveal-delay-1">
+      Nossa visão pela voz do<br>
+      <strong>nosso CEO</strong>, na <em>NYSE</em>.
+    </h2>
+    <p class="ceo-sub reveal reveal-delay-2">
+      Roberto Oliveira, CEO &amp; Co-fundador da Blip, em entrevista na New York Stock Exchange sobre o futuro da inteligência conversacional.
+    </p>
+    <div class="ceo-video reveal reveal-delay-2">
+      <div class="video-wrapper">
+        <iframe
+          src="https://www.youtube.com/embed/xv9u4y8X3VQ"
+          title="CEO Blip na NYSE"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="cta">
+  <div class="cta-eyebrow">Próximo passo</div>
+  <h2 class="cta-title reveal">
+    Vamos <strong>acelerar</strong><br>essa conversa?
+  </h2>
+  <p class="cta-sub reveal reveal-delay-1">
+    Estamos prontos para apresentar um piloto para a próxima etapa da Porsche Cup. Do MVP ao full rollout — em poucas semanas, não meses.
+  </p>
+  <div class="reveal reveal-delay-2">
+    <a href="https://wa.me/5511994958642?text=Ol%C3%A1!%20Quero%20conversar%20sobre%20o%20projeto%20Porsche%20Cup%20%C3%97%20Blip" target="_blank" rel="noopener" class="cta-button">
+      <span class="cta-button-icon">💬</span>
+      Quero conversar sobre o projeto
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span class="footer-left">© 2025 Blip · Todos os direitos reservados</span>
+  <span class="footer-right">blip <span>×</span> Porsche Cup Brasil</span>
+</footer>
+
+<script>
+function toggleUC(el) {
+  const isActive = el.classList.contains('active');
+  document.querySelectorAll('.uc-item').forEach(i => i.classList.remove('active'));
+  if (!isActive) el.classList.add('active');
+}
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
